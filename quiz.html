@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Quiz</title>
+</head>
+<body>
+    <main>
+        <header class="bg-white">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+                <div class="flex lg:flex-1">
+                    <a href="#" class="-m-1.5 p-1.5">
+                        <span class="sr-only">Your Company</span>
+                    </a>
+                </div>
+                <div class="hidden lg:flex lg:gap-x-12">
+                    <a href="index.html" class="text-sm font-semibold text-gray-900">Home</a>
+                    <a href="admin.html" class="text-sm font-semibold text-gray-900">Admin</a>
+                    <a href="quiz.html" class="text-sm font-semibold text-gray-900">Quiz</a>
+                </div>
+                <div class="flex lg:flex-1 lg:justify-end">
+                    <img class="h-8 cursor-pointer" src="assets/add.svg" alt="">
+                </div>
+            </nav>
+        </header>
+        <section style="height: 80vh;" class="w-3/5 bg-gray-50 m-auto rounded-2xl">
+            <div id="quiz-container">
+                <div class="flex justify-between items-center  ">
+                    <h3 id="duration" class="mt-4 text-sm font-bold text-center text-gray-700 px-4 py-2">Duration : 3min</h3>
+                    <h1 id="quiz-title" class="mt-4 text-xl font-bold text-center text-gray-700 px-4 py-2">Culture Quiz</h1>
+                    <h3 id="question-count" class="mt-4 text-sm font-bold text-center text-gray-700 px-4 py-2">Question : 1/5</h3>
+                </div>
+                <div class="flex justify-between items-center  ">
+                    <h3 id="point" class=" text-sm font-normal text-center text-gray-800 px-4">Question Point : 10pts</h3>
+                    <h3 id="total_points" class=" text-sm font-normal text-center text-gray-800 px-4 ">Total Points : 40pts</h3>
+                    
+                </div>
+                <hr class="w-full h-0.5 my-8 bg-gray-200 border-0 rounded dark:bg-gray-700">
+                
+                <div class="w-4/5 m-auto bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div id="progress-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%;"></div>
+                </div>
+  
+                <h1 id="question-text" class="mt-4 text-sm font-bold text-center text-gray-700 p-4"></h1>
+                
+                <div id="options-container" class="flex flex-col w-3/4 m-auto"></div>
+                <h1 id="explication" class="hidden mt-4 text-sm font-bold text-center text-gray-700 p-4"></h1>
+                <div class="flex justify-center mt-4">
+                    <button id="next-button" type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Next</button>
+                </div>
+                
+            </div>
+            <div id="popup-modal" tabindex="-1" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="relative p-4 w-full max-w-md">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div class="p-4 md:p-5 text-center">
+                            <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Quiz Complete!</h3>
+                            <button id="try_again_btn" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                                Try Again
+                            </button>
+                            <button id="home_page_btn" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Home Page</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        let currentQuestionIndex = 0;
+        let validAnswerCount = 0;
+        let quizData = null;
+        let timer;
+        let total = 0 ;
+        let users = 0 ;
+        let correctOne = [] ;
+        let missedOne = [] ;
+
+      
+        
+        const selectedCategory = localStorage.getItem("selectedcategory");
+        
+        function initializeQuiz() {
+            const databyadmin = JSON.parse(localStorage.getItem("quizzes") || "[]");
+            quizData = databyadmin.find(data => data.quizName === selectedCategory);
+            displayQuestion();
+        }
+
+    
+        
+       
+
+        
+        
+
+        function displayQuestion() {
+                        
+            if (currentQuestionIndex >= quizData.questions.length) {
+                toggleModal();
+                document.querySelector('#popup-modal h3').innerText = 
+                    `Quiz complete! You got ${validAnswerCount} out of ${quizData.questions.length} correct.
+                    Total Score = ${total} Points`
+                    console.log(`the correct ones : ${correctOne.titleOfQustion}`);
+                    console.log(`the missed ones : ${missedOne.titleOfQustion}`);
+                    
+                return;
+            }
+
+   
+            
+            
+        
+
+            const currentQuestion = quizData.questions[currentQuestionIndex];
+            document.getElementById("total_points").innerText = `Total Points : ${total}pts`;
+            document.getElementById('quiz-title').innerText = `${selectedCategory} Quiz (${quizData.questions[currentQuestionIndex].type})`;
+            document.getElementById('question-text').innerText = currentQuestion.question;
+            document.getElementById('question-count').innerText = 
+                `Question: ${currentQuestionIndex + 1}/${quizData.questions.length}`;
+            document.getElementById('progress-bar').style.width = 
+                `${((currentQuestionIndex + 1) / quizData.questions.length) * 100}%`;
+
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            if(currentQuestion.type ==="mcq"){
+            let point = 10;
+            document.getElementById("point").innerText = `Question Point : ${point}pts`;
+                currentQuestion.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.innerText = option;
+                    button.className = "text-left text-white bg-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2";
+                    button.onclick = () => checkAnswer(button, option, currentQuestion.correctAnswer);
+                    optionsContainer.appendChild(button);
+                });
+                document.getElementById('next-button').disabled = true;
+            }
+            
+             else if (currentQuestion.type === "boolean") {
+                let point = 5;
+                document.getElementById("point").innerText = `Question Point : ${point}pts`;
+                let boolean_option = ["true", "false"];
+                boolean_option.forEach(option => {
+                    const button = document.createElement('button');
+                    button.innerText = option;
+                    button.className = "text-left text-white bg-gray-400 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2";
+                    button.onclick = () => checkAnswer(button, option, currentQuestion.correctAnswer);
+                    optionsContainer.appendChild(button);
+                });
+                document.getElementById('next-button').disabled = true;
+            } else if (currentQuestion.type === "text") {
+                let point = 20 ;
+                document.getElementById("point").innerText = `Question Point : ${point}pts`;
+                optionsContainer.innerHTML=`<input id="message" rows="4" class="block p-2.5 w-3/4 m-auto text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your answer here..."></input>`;
+                const input_answer = document.getElementById("message");
+               
+                
+                input_answer.addEventListener("change" , ()=>{
+                    
+                    const input_text = input_answer.value ;
+                    if(currentQuestion.correctAnswer.includes(input_text)){
+                    let message = document.getElementById("message");
+                    message.classList.add("bg-green-500")    
+                    console.log("correct");
+                    
+                    
+                    validAnswerCount++;
+                    total+=20 ;
+                    document.getElementById("total_points").innerText = `Total Points : ${total}pts`;
+                    document.getElementById('next-button').disabled = false;
+                    correctOne.push(
+                    {
+                        titleOfQustion : quizData.questions[currentQuestionIndex].question,
+                        correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
+                    }
+                )
+                    
+                }
+                else{
+                let message = document.getElementById("message");
+                message.classList.add("bg-red-500")
+                let explication = document.getElementById("explication");
+                explication.classList.remove("hidden")
+                explication.innerText = `Explication : ${quizData.questions[currentQuestionIndex].explanation}`;
+                missedOne.push(
+                    {
+                        titleOfQustion : quizData.questions[currentQuestionIndex].question,
+                        correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
+                    }
+                )
+                    
+                }
+                })
+                
+                
+            }
+
+            startTimer(); 
+        }
+
+        function startTimer() {
+            countdown = 15;
+            const timerDisplay = document.getElementById('duration');
+            timerDisplay.innerText = `Time Left: ${countdown}s`;
+
+            timer = setInterval(() => {
+                countdown--;
+                timerDisplay.innerText = `Time Left: ${countdown}s`;
+
+                if (countdown === 0) {
+                    clearInterval(timer);
+                    moveToNextQuestion(); 
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(selectedButton, selectedOption, correctAnswer) {
+            const optionsContainer = document.getElementById('options-container');
+            const allButtons = optionsContainer.querySelectorAll("button");
+            const databyadmin = JSON.parse(localStorage.getItem("quizzes") || "[]");
+            quizData = databyadmin.find(data => data.quizName === selectedCategory);
+            
+      
+            allButtons.forEach(button => button.disabled = true);
+            if (selectedOption.includes(correctAnswer) ) {
+                correctOne.push(
+                    {
+                        titleOfQustion : quizData.questions[currentQuestionIndex].question,
+                        correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
+                    }
+                )
+
+                
+                selectedButton.classList.replace("bg-gray-400", "bg-green-500");
+                validAnswerCount++;
+                if(quizData.questions[currentQuestionIndex].type === "mcq"){
+                     total+= 10 ;
+                     document.getElementById("total_points").innerText = `Total Points : ${total}pts`;
+                     
+                }else if (quizData.questions[currentQuestionIndex].type === "boolean"){
+                    total+= 5 ;
+                    document.getElementById("total_points").innerText = `Total Points : ${total}pts`;
+                }
+            } else {
+                selectedButton.classList.replace("bg-gray-400", "bg-red-500");
+                missedOne.push(
+                    {
+                        titleOfQustion : quizData.questions[currentQuestionIndex].question,
+                        correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
+                    }
+                )
+
+                allButtons.forEach(button => {
+                    if (button.innerText === correctAnswer) {
+                        button.classList.replace("bg-gray-400", "bg-green-500");
+                    }
+                let explication = document.getElementById("explication");
+                explication.classList.remove("hidden")
+                explication.innerText = `Explication : ${quizData.questions[currentQuestionIndex].explanation}`;
+
+                
+                
+         
+                
+                
+                });
+            }
+
+            document.getElementById('next-button').disabled = false;
+            clearInterval(timer); 
+        }
+
+        function moveToNextQuestion() {
+            currentQuestionIndex++;
+            displayQuestion();
+            let explication = document.getElementById("explication");
+            explication.classList.add("hidden");
+        }
+
+        document.getElementById('next-button').onclick = moveToNextQuestion;
+
+        document.getElementById('try_again_btn').onclick = function() {
+            location.reload();
+        };
+        
+        document.getElementById('home_page_btn').onclick = function() {
+            window.location.href = 'index.html';
+        };
+
+        function toggleModal() {
+            document.getElementById('popup-modal').classList.toggle('hidden');
+        }
+
+        initializeQuiz();
+    </script>
+</body>
+</html>

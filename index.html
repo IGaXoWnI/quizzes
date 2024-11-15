@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Quiz</title>
+</head>
+<body>
+    <main>
+        <header class="bg-white">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+                <div class="flex lg:flex-1">
+                    <a href="index.html" class="-m-1.5 p-1.5">
+                        <span class="sr-only">Your Company</span>
+                        <img src="assets/logo.png" class="h-5 " alt="">
+                    </a>
+                </div>
+                <div class="hidden lg:flex lg:gap-x-12">
+                    <a href="index.html" class="text-sm font-semibold text-gray-900">Home</a>
+                    <a href="dashboard.html" class="text-sm font-semibold text-gray-900">Admin</a>
+                </div>
+                <div class="flex lg:flex-1 lg:justify-end">
+                    
+                    <a href="dashboard.html"><img class="h-8 cursor-pointer" src="assets/add.svg" alt=""></a>
+                </div>
+            </nav>
+        </header>
+ 
+        <section class="flex flex-col justify-center items-center gap-y-6 h-screen w-8/10  p-8">
+          <h1 class="top_title font-nelphim text-5xl text-blue-800 mb-2">Unlock Knowledge</h1>
+          <h2 class=" title text-2xl text-gray-700 mb-4">Embrace the Quest</h2>
+          <hr class="custom-hr">
+          <p class="text-center text-lg text-gray-600 mb-8 px-4">
+              Where Every Question Unveils a World of Wisdom, Sparking the Flames of Learning <br>
+              and Illuminating the Path to Intellectual Brilliance!
+          </p>
+          <div class="flex space-x-4">
+              <button type="submit" class="btn1 p-3 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200 ease-in-out">
+                Ery Quizzie out!
+              </button>
+              <button type="submit" class="btn2 p-3 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200 ease-in-out">
+                Download now
+              </button>
+          </div>
+      </section>
+       <section>
+        <div class="flex justify-center gap-x-12 items-center ">
+          <form class="max-w-sm mx-auto flex items-center gap-x-6">
+            <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dificulte</label>
+            <select id="filterInput" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option selected></option>
+              <option value="Hard">Hard</option>
+              <option value="Medium">Medium</option>
+              <option value="Easy">Easy</option>
+            </select>
+          </form>
+          
+          
+<form class="flex items-center max-w-sm mx-auto">   
+  <label for="search for a quiz" class="sr-only">Search</label>
+  <div class="relative w-full">
+      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+      </div>
+      <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="search for a quiz..." required />
+  </div>
+  
+</form>
+
+        </div>
+        
+
+<div class="bg-white ">
+    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">  
+      <div id="quizContainer" class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+
+      </div>
+    </div>
+  </div>
+  
+    </main>
+       </section>
+</body>
+<script>
+    const databyadmin = JSON.parse(localStorage.getItem("quizzes"));
+    const quizContainer = document.getElementById("quizContainer");
+    const quizNames = databyadmin.map(quiz => quiz.quizName);
+    
+    databyadmin.forEach((data)=>{
+      if(data.status === "active"){
+        quizContainer.innerHTML+= `<a href="quiz.html" class="group card"  category=${data.quizName} complexity = ${data.complexity}>
+          <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+            <img src="assets/culture.jpg" alt="Tall slender porcelain bottle with natural clay textured body and cork stopper." class="h-full w-full object-cover object-center group-hover:opacity-75">
+          </div>
+          <div class="flex justify-between items-center p-4 ">
+            <h1 class="mt-4 text-xl font-bold text-center text-gray-700">${data.quizName} Quiz</h1>
+            <h3 class="mt-4 text-sm font-bold text-center text-gray-500">Questions : ${data.questions.length}</h3>
+          </div>
+          <div class="flex justify-between items-center p-4 ">
+            <h3 class="mt-4 text-sm font-bold text-center text-gray-500">Duration : ${15*data.questions.length}s</h3>
+            <h3 class="mt-4 text-sm font-bold text-center text-gray-500">Level : ${data.complexity}</h3>
+          </div>  
+          <div class="flex justify-center">
+            <button type="button" class="mt-4 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Start Quiz</button>
+          </div>
+        </a>`;
+
+      }
+
+        data.questions.forEach((question)=>{
+          if(question.type === "mcq"){
+            let points = 10 ;
+          }else if(question.type === "boolean"){
+            let points = 5;
+          }else{
+          let point = 20 ;
+        }
+        })
+      
+    })
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card)=>{
+    card.addEventListener("click" , ()=>{
+      let selectedcategory = card.getAttribute("category");
+      localStorage.setItem("selectedcategory" , selectedcategory);
+
+    })
+  })
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+  const input = document.getElementById("simple-search");
+  
+
+  input.addEventListener("input" , ()=>{
+    const input_value = input.value.toLowerCase() ;
+    cards.forEach((card) =>{
+      let text = card.textContent.toLowerCase();
+      if(text.includes(input_value)){
+            card.style.display = "";
+        }else{
+            card.style.display = "none";
+        }
+    })
+
+    console.log(input_value);
+  })
+//////////////////////////////////////////////////////////////////////////////////////////////////
+const filterInput = document.getElementById("filterInput");
+const quizzes = document.querySelectorAll(".card");
+
+filterInput.addEventListener("change" , function(){
+const filterValue = filterInput.value.toLowerCase();    
+quizzes.forEach(function(quiz){
+  const complexity = quiz.getAttribute("complexity").toLowerCase();
+  if(filterValue === "" || complexity === filterValue){
+    quiz.classList.remove("hidden");
+  }else{
+    quiz.classList.add("hidden");
+  }
+})
+})
+
+</script>
+<!-- <script src="import_data.js"></script> -->
+
+</html>
