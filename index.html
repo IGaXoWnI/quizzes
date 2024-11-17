@@ -154,7 +154,7 @@ const filterInput = document.getElementById("filterInput");
 const quizzes = document.querySelectorAll(".card");
 
 filterInput.addEventListener("change" , function(){
-const filterValue = filterInput.value.toLowerCase();    
+const filterValue = filterInput.value.toLowerCase();   
 quizzes.forEach(function(quiz){
   const complexity = quiz.getAttribute("complexity").toLowerCase();
   if(filterValue === "" || complexity === filterValue){
@@ -166,5 +166,4 @@ quizzes.forEach(function(quiz){
 })
 
 </script>
-
 </html>
