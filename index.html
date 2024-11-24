@@ -40,7 +40,7 @@
               <button type="submit" class="btn1 p-3 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200 ease-in-out">
                 Ery Quizzie out!
               </button>
-              <button type="submit" class="btn2 p-3 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 transition duration-200 ease-in-out">
+              <button type="submit" class="btn2 p-3 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 hover:text-white dark:focus:ring-blue-800 transition duration-200 ease-in-out">
                 Download now
               </button>
           </div>
@@ -85,7 +85,6 @@
 <script>
     const databyadmin = JSON.parse(localStorage.getItem("quizzes"));
     const quizContainer = document.getElementById("quizContainer");
-    const quizNames = databyadmin.map(quiz => quiz.quizName);
     
     databyadmin.forEach((data)=>{
       if(data.status === "active"){

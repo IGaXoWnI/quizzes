@@ -63,6 +63,7 @@
                             </button>
                             <button id="home_page_btn" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">Home Page</button>
                         </div>
+                      
                     </div>
                 </div>
             </div>
@@ -75,9 +76,18 @@
         let quizData = null;
         let timer;
         let total = 0 ;
-        let users = [] ;
         let correctOne = [] ;
         let missedOne = [] ;
+        let userData = JSON.parse(localStorage.getItem("userData")) || [];
+        let score  = 0 ;
+        let userId = parseInt(localStorage.getItem("userId")) || 0;
+        let correctNumber = 0 ;
+        let missedNumber = 0;
+        let percent = 0 ;
+    
+       
+        
+        
 
       
         
@@ -137,6 +147,37 @@
                                 </div>
                             </div>
                         `;
+
+                    userId++ ;
+                    localStorage.setItem("userId" , userId);
+                    score = total ;
+                    correctNumber = correctOne.length ;
+                    missedNumber = missedOne.length ;
+                    percent = ((correctNumber / quizData.questions.length)*100).toFixed(2);
+
+
+                    userData.push({
+                        id : userId,
+                        score :score,
+                        correctNumber : correctNumber,
+                        missedNumber : missedNumber,
+                        percent : percent,
+
+                    })
+                   
+                    localStorage.setItem("userData" , JSON.stringify(userData));
+                    console.log(userData);
+                    
+                    
+                    
+                    
+
+                    
+                        
+                        
+                    
+                        
+                        
                 return;
             }
 
@@ -208,7 +249,7 @@
                         correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
                     }
                 )
-                    
+                    clearInterval(timer);
                 }
                 else{
                 let message = document.getElementById("message");
@@ -222,7 +263,7 @@
                         correctanswer : quizData.questions[currentQuestionIndex].correctAnswer,
                     }
                 )
-                    
+                clearInterval(timer);
                 }
                 })
                 
